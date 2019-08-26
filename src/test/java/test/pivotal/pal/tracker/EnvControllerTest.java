@@ -24,5 +24,4 @@ public class EnvControllerTest {
         assertThat(env.get("CF_INSTANCE_INDEX")).isEqualTo("34");
         assertThat(env.get("CF_INSTANCE_ADDR")).isEqualTo("123.sesame.street");
     }
-
 }
