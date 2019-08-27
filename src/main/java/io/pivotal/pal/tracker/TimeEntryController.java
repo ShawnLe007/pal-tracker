@@ -1,8 +1,6 @@
 package io.pivotal.pal.tracker;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +11,6 @@ import java.util.List;
 public class TimeEntryController {
     private TimeEntryRepository timeEntryRepository;
 
-    @Autowired
     public TimeEntryController(TimeEntryRepository timeEntryRepository) {
         this.timeEntryRepository = timeEntryRepository;
     }
@@ -22,7 +19,6 @@ public class TimeEntryController {
     public ResponseEntity create(@RequestBody TimeEntry timeEntryToCreate) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .contentType(MediaType.APPLICATION_JSON)
                 .body(timeEntryRepository.create(timeEntryToCreate));
     }
 

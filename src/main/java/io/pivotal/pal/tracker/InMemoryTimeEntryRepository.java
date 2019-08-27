@@ -24,7 +24,7 @@ public class InMemoryTimeEntryRepository implements TimeEntryRepository {
     }
 
     @Override
-    public List list() {
+    public List<TimeEntry> list() {
         return new ArrayList(timeEntryTracker.values());
     }
 
