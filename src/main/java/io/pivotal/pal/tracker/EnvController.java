@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -25,9 +26,13 @@ public class EnvController {
 
     @GetMapping("/env")
     public Map<String, String> getEnv() {
-        return Map.of("PORT", port,
-                "MEMORY_LIMIT", memoryLimit,
-                "CF_INSTANCE_INDEX", cfInstanceIndex,
-                "CF_INSTANCE_ADDR", cfInstanceAddr);
+        Map<String, String> envMap = new HashMap<>();
+
+        envMap.put("PORT", port);
+        envMap.put("MEMORY_LIMIT", memoryLimit);
+        envMap.put("CF_INSTANCE_INDEX", cfInstanceIndex);
+        envMap.put("CF_INSTANCE_ADDR", cfInstanceAddr);
+
+        return envMap;
     }
 }
