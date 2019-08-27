@@ -75,9 +75,9 @@ public class TimeEntry {
         TimeEntry timeEntry = (TimeEntry) o;
         return
                 projectId == timeEntry.projectId &&
-                userId == timeEntry.userId &&
-                hours == timeEntry.hours &&
-                date.equals(timeEntry.date);
+                        userId == timeEntry.userId &&
+                        hours == timeEntry.hours &&
+                        date.equals(timeEntry.date);
     }
 
     @Override

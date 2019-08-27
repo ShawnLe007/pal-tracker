@@ -1,7 +1,5 @@
 package io.pivotal.pal.tracker;
 
-import io.pivotal.pal.tracker.TimeEntry;
-import io.pivotal.pal.tracker.TimeEntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -10,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/time-entries")
+@RestController
+@RequestMapping("/time-entries")
 public class TimeEntryController {
     private TimeEntryRepository timeEntryRepository;
 
@@ -27,7 +26,7 @@ public class TimeEntryController {
                 .body(timeEntryRepository.create(timeEntryToCreate));
     }
 
-    @GetMapping("/time-entries/{timeEntryId}")
+    @GetMapping("/{timeEntryId}")
     public ResponseEntity<TimeEntry> read(@PathVariable long timeEntryId) {
         TimeEntry timeEntry = timeEntryRepository.find(timeEntryId);
 
@@ -47,7 +46,7 @@ public class TimeEntryController {
                 .body(timeEntryRepository.list());
     }
 
-    @PutMapping("/time-entries/{timeEntryId}")
+    @PutMapping("/{timeEntryId}")
     public ResponseEntity update(@PathVariable long timeEntryId, @RequestBody TimeEntry expected) {
         TimeEntry timeEntry = timeEntryRepository.update(timeEntryId, expected);
 
@@ -60,7 +59,7 @@ public class TimeEntryController {
                     .status(HttpStatus.NOT_FOUND).build();
     }
 
-    @DeleteMapping("/time-entries/{timeEntryId}")
+    @DeleteMapping("/{timeEntryId}")
     public ResponseEntity delete(@PathVariable long timeEntryId) {
         timeEntryRepository.delete(timeEntryId);
         return ResponseEntity

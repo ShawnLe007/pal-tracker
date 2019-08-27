@@ -9,7 +9,7 @@ public class PalTrackerApplication {
 
     @Bean
     public TimeEntryRepository getRepository() {
-         return new InMemoryTimeEntryRepository();
+        return new InMemoryTimeEntryRepository();
     }
 
     public static void main(String[] args) {

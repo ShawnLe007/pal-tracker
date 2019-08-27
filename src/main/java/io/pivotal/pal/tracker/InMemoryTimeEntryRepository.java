@@ -1,20 +1,18 @@
 package io.pivotal.pal.tracker;
 
-import org.springframework.context.annotation.Bean;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryTimeEntryRepository implements TimeEntryRepository {
-    private Map<Long, TimeEntry> timeEntryTracker;
-    private long idCounter = 0;
-
-    public InMemoryTimeEntryRepository() {
-        this.timeEntryTracker = new HashMap<Long, TimeEntry>();
-    }
+    private Map<Long, TimeEntry> timeEntryTracker = new ConcurrentHashMap<>();
+    private AtomicLong idCounter = new AtomicLong(0);
 
     @Override
     public TimeEntry create(TimeEntry timeEntry) {
-        Long hash = ++idCounter;
+        Long hash = idCounter.incrementAndGet();
         timeEntry.setId(hash);
         timeEntryTracker.put(hash, timeEntry);
         return timeEntry;
