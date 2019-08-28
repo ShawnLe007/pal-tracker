@@ -61,14 +61,19 @@ public class JdbcTimeEntryRepository implements TimeEntryRepository {
 
     @Override
     public TimeEntry update(long id, TimeEntry timeEntry) {
-        jdbcTemplate.update("UPDATE time_entries " +
-                        "SET project_id = ?, user_id = ?, date = ?,  hours = ? " +
-                        "WHERE id = ?",
-                timeEntry.getProjectId(),
-                timeEntry.getUserId(),
-                Date.valueOf(timeEntry.getDate()),
-                timeEntry.getHours(),
-                id);
+        jdbcTemplate.update(con -> {
+            PreparedStatement statement = con.prepareStatement("UPDATE time_entries " +
+                    "SET project_id = ?, user_id = ?, date = ?,  hours = ? " +
+                    "WHERE id = ?");
+
+            statement.setLong(1, timeEntry.getProjectId());
+            statement.setLong(2, timeEntry.getUserId());
+            statement.setDate(3, Date.valueOf(timeEntry.getDate()));
+            statement.setInt(4, timeEntry.getHours());
+            statement.setLong(5, id);
+
+            return statement;
+        });
 
         return find(id);
     }
@@ -78,19 +83,14 @@ public class JdbcTimeEntryRepository implements TimeEntryRepository {
         jdbcTemplate.update("Delete from time_entries where id = ?", timeEntryId);
     }
 
-    private RowMapper<TimeEntry> rowMapper = new RowMapper<TimeEntry>() {
-        @Override
-        public TimeEntry mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new TimeEntry(
-                    rs.getLong("id"),
-                    rs.getLong("project_id"),
-                    rs.getLong("user_id"),
-                    rs.getDate("date").toLocalDate(),
-                    rs.getInt("hours")
-            );
-        }
-    };
+    private final RowMapper<TimeEntry> rowMapper = (rs, rowNum) -> new TimeEntry(
+            rs.getLong("id"),
+            rs.getLong("project_id"),
+            rs.getLong("user_id"),
+            rs.getDate("date").toLocalDate(),
+            rs.getInt("hours")
+    );
 
-    ResultSetExtractor<TimeEntry> resultSetExtractor = (rs) ->
+    private final ResultSetExtractor<TimeEntry> resultSetExtractor = (rs) ->
             rs.next() ? rowMapper.mapRow(rs, rs.getRow()) : null;
 }
